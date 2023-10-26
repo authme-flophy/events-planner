@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "test": "cross-env NODE_ENV=test jest --watchAll"
+    "test": "cross-env NODE_ENV=test jest"
   },
   "keywords": [],
   "author": "",
