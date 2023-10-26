@@ -8,9 +8,8 @@ const app = express();
 
 if (process.env.NODE_ENV !== "test") {
   connectDB();
+  app.listen(4000, console.log("server running 😃"));
 }
-
-app.listen(4000, console.log("server running 😃"));
 
 app.use(express.json());
 
