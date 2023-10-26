@@ -18,5 +18,4 @@ jobs:
         with:
           node-version: 18
       - run: npm ci
-      env
       - run: npm test
