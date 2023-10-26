@@ -20,3 +20,5 @@ app.use("/events", eventRouter);
 app.use((req, res) => {
   res.status(404).send("<p> page not found </p>");
 });
+
+module.exports = app;
