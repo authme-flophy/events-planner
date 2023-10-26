@@ -8,14 +8,13 @@ const app = express();
 
 if (process.env.NODE_ENV !== "test") {
   connectDB();
+  app.listen(4000, console.log("server running 😃"));
 }
-
-app.listen(4000, console.log("server running 😃"));
 
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.send("<p>set up successfully!!</p>");
+  res.send("<p>set up successfully!!!!</p>");
 });
 
 app.use("/auth", authRouter);
