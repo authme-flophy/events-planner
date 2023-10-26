@@ -7,10 +7,16 @@ on:
 jobs:
   test_pull_request:
     runs-on: ubuntu-latest
+
+    env:
+      SECRET_CODE: ${{ secrets.SECRET_CODE }}
+      NODE_ENV: ${{ secrets.NODE_ENV }}
+
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
           node-version: 18
       - run: npm ci
+      env
       - run: npm test
