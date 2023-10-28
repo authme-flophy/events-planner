@@ -72,3 +72,46 @@ describe("retrieve all events", () => {
     expect(res.body).toBeTruthy();
   });
 });
+
+describe("Update Event API Endpoint", () => {
+  let eventId;
+
+  beforeAll(async () => {
+    const event = new Event({
+      title: "Test Event Title",
+      description: "Test Event Description",
+      date: "2023-11-01T17:00:00+03:00",
+      location: "Test Event Location",
+      creator: userId,
+    });
+
+    const newEvent = await event.save();
+
+    eventId = newEvent._id.toString();
+  });
+
+  it("Should update an existing event", async () => {
+    const req = {
+      params: {
+        id: eventId,
+      },
+      body: {
+        title: "Test Event Title (updated)",
+        description: "Test Event Description",
+        date: "2023-11-01T17:00:00+03:00",
+        location: "Test Event Location",
+        creator: userId,
+      },
+      userId: userId,
+    };
+
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    await eventControllers.event_update(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(201);
+  });
+});
