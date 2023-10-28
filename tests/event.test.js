@@ -114,4 +114,22 @@ describe("Update Event API Endpoint", () => {
 
     expect(res.status).toHaveBeenCalledWith(201);
   });
+
+  it("Should delete an existing event", async () => {
+    const req = {
+      params: {
+        id: eventId,
+      },
+      userId,
+    };
+
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    await eventControllers.event_delete(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(200);
+  });
 });
