@@ -1,4 +1,3 @@
-const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 require("dotenv").config();
@@ -13,7 +12,7 @@ const login = async (req, res) => {
       return res.status(400).json({ error: "Email or Password is incorrect" });
     }
 
-    const pwdMatch = await bcrypt.compare(password, user.password);
+    const pwdMatch = await user.matchPasswords(password);
 
     if (!pwdMatch) {
       return res.status(400).json({ error: "Email or Password is incorrect" });
@@ -55,13 +54,10 @@ const register = async (req, res) => {
         .json({ error: "An account associated with that email exists" });
     }
 
-    // we are hashing the password to make sure it is stored in a hashed form
-    const hashpwd = await bcrypt.hash(password, 12);
-
     user = new User({
       username,
       email,
-      password: hashpwd,
+      password,
     });
 
     const newUser = user.save();
