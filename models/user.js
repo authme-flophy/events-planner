@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const bcrypt = require("bcryptjs");
+const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
@@ -19,6 +20,8 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    resetPasswordToken: String,
+    resetPasswordExpires: Date,
   },
   { timestamps: true }
 );
@@ -47,6 +50,22 @@ userSchema.methods.getRefreshToken = function () {
   return jwt.sign({ id: this._id }, process.env.REFRESH_SECRET_CODE, {
     expiresIn: process.env.REFRESH_EXPIRY,
   });
+};
+
+userSchema.methods.forgotPasswordToken = function () {
+  const resetToken = crypto.randomBytes(64).toString("hex");
+
+  this.resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+  const expirationTime = new Date();
+  expirationTime.setMinutes(expirationTime.getMinutes() + 15);
+
+  this.resetPasswordExpires = expirationTime;
+
+  return resetToken;
 };
 
 module.exports = mongoose.model("User", userSchema);
