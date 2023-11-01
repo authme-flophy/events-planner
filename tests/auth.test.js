@@ -94,6 +94,6 @@ describe("login at /auth/login", () => {
     expect(res.statusCode).toBe(400);
     expect(res.body.error).toBe("Email or Password is incorrect");
     expect(res.header["token"]).toBeUndefined();
-    expect(res.header["refresh_token"]).toBeUnefined();
+    expect(res.header["refresh_token"]).toBeUndefined();
   });
 });
