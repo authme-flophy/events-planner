@@ -135,10 +135,10 @@ const forgotPassword = async (req, res) => {
       from: process.env.EMAIL_ADDRESS,
       to: user.email,
       subject: "Event-planner password reset request",
-      text: `
+      html: `
         <h1>Reset password instructions</h1>
-        <p>Follow the link below to reset your password:</p>
-        <p>${resetLink}</p>
+        <p>Follow the link to reset your password: <a href="${resetLink}" target="_blank">reset password</a></p>
+        
         <p><b>This link expires 15 minutes after the reset password request</b></p>
       `,
     };
