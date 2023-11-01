@@ -47,6 +47,7 @@ describe("register at /auth/register", () => {
     });
     expect(res.statusCode).toBe(201);
     expect(res.header["token"]).toBeDefined();
+    expect(res.header["refresh_token"]).toBeDefined();
   });
 
   it("Should return an error message if an account with the same email exists", async () => {
@@ -58,6 +59,7 @@ describe("register at /auth/register", () => {
     expect(res.statusCode).toBe(400);
     expect(res.body.error).toBe("An account associated with that email exists");
     expect(res.header["token"]).toBeUndefined();
+    expect(res.header["refresh_token"]).toBeUndefined();
   });
 });
 
@@ -70,6 +72,7 @@ describe("login at /auth/login", () => {
     expect(res.statusCode).toBe(200);
     expect(res.body.message).toBe("Login successful");
     expect(res.header["token"]).toBeDefined();
+    expect(res.header["refresh_token"]).toBeDefined();
   });
 
   it("Should return an error message if the email is incorrect", async () => {
@@ -80,6 +83,7 @@ describe("login at /auth/login", () => {
     expect(res.statusCode).toBe(400);
     expect(res.body.error).toBe("Email or Password is incorrect");
     expect(res.header["token"]).toBeUndefined();
+    expect(res.header["refresh_token"]).toBeUndefined();
   });
 
   it("Should return an error message if the password is incorrect", async () => {
@@ -90,5 +94,6 @@ describe("login at /auth/login", () => {
     expect(res.statusCode).toBe(400);
     expect(res.body.error).toBe("Email or Password is incorrect");
     expect(res.header["token"]).toBeUndefined();
+    expect(res.header["refresh_token"]).toBeUnefined();
   });
 });
