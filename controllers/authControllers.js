@@ -19,11 +19,13 @@ const login = async (req, res) => {
     }
 
     const token = user.getToken();
+    const refresh_token = user.getRefreshToken();
 
     res
       .status(200)
       .set({
         token: token,
+        refresh_token: refresh_token,
       })
       .json({ message: "Login successful" });
   } catch (error) {
@@ -54,11 +56,13 @@ const register = async (req, res) => {
     await user.save();
 
     const token = user.getToken();
+    const refresh_token = user.getRefreshToken();
 
     res
       .status(201)
       .set({
         token: token,
+        refresh_token: refresh_token,
       })
       .json({ message: "Account creation successful" });
   } catch (error) {
