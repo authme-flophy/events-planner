@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
-const transport = require("../config/mail");
+const crypto = require("crypto");
+const transporter = require("../config/mail");
 require("dotenv").config();
 
 const login = async (req, res) => {
@@ -151,15 +152,20 @@ const forgotPassword = async (req, res) => {
       res.status(201).json({ message: "Password reset email sent" });
     });
   } catch (err) {
+    console.log(err);
     res.status(500).json({ error: "server error" });
   }
 };
 
 const resetPassword = async (req, res) => {
+  const resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(req.params.resetToken)
+    .digest("hex");
+
   try {
     const user = await User.findOne({
-      resetPasswordToken: { $exists: true },
-      resetPasswordToken: await bcrypt.hash(req.params.resetToken, 10),
+      resetPasswordToken: resetPasswordToken,
       resetPasswordExpires: { $gt: Date.now() },
     });
 
@@ -185,4 +191,6 @@ module.exports = {
   login,
   register,
   refresh_token,
+  forgotPassword,
+  resetPassword,
 };

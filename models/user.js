@@ -55,7 +55,10 @@ userSchema.methods.getRefreshToken = function () {
 userSchema.methods.forgotPasswordToken = function () {
   const resetToken = crypto.randomBytes(64).toString("hex");
 
-  this.resetPasswordToken = bcrypt.hash(resetToken, 10);
+  this.resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
 
   const expirationTime = new Date();
   expirationTime.setMinutes(expirationTime.getMinutes() + 15);
