@@ -11,6 +11,7 @@ jobs:
     env:
       SECRET_CODE: ${{ secrets.SECRET_CODE }}
       NODE_ENV: ${{ secrets.NODE_ENV }}
+      EXPIRY: ${{ secrets.EXPIRY }}
 
     steps:
       - uses: actions/checkout@v2

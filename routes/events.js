@@ -4,7 +4,7 @@ const eventsController = require("../controllers/eventControllers");
 
 const router = express.Router();
 
-router.get("/", isAuth, eventsController.events_index);
+router.get("/", eventsController.events_index);
 router.get("/:id", isAuth, eventsController.events_details);
 router.post("/", isAuth, eventsController.event_create);
 router.put("/:id", isAuth, eventsController.event_update);
