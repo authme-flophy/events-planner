@@ -12,8 +12,6 @@ router.post("/forgot-password", authControllers.forgotPassword);
 
 router.post("/reset-password/:resetToken", authControllers.resetPassword);
 
-// router.get("/:id", (req, res) => {});
-// router.delete("/:id", (req, res) => {});
-// router.put("/:id", (req, res) => {});
+router.post("/logout", authControllers.logout);
 
 module.exports = router;
