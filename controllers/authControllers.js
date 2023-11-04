@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const crypto = require("crypto");
 const transporter = require("../config/mail");
+const TokenBlacklist = require("../models/tokenBlacklist");
 require("dotenv").config();
 
 const login = async (req, res) => {
@@ -22,6 +23,7 @@ const login = async (req, res) => {
 
     const token = user.getToken();
     const refresh_token = user.getRefreshToken();
+    console.log(token);
 
     res
       .status(200)
@@ -187,10 +189,34 @@ const resetPassword = async (req, res) => {
   }
 };
 
+const logout = async (req, res) => {
+  const token = req.token;
+  const userId = req.userId;
+
+  console.log(token);
+  console.log(userId);
+
+  try {
+    const blacklistEntry = new TokenBlacklist({
+      userId,
+      token,
+    });
+    await blacklistEntry.save();
+
+    console;
+
+    return res.status(200).json({ message: "Logged out successfully" });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: "server error" });
+  }
+};
+
 module.exports = {
   login,
   register,
   refresh_token,
   forgotPassword,
   resetPassword,
+  logout,
 };
