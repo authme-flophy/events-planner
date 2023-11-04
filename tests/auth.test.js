@@ -20,14 +20,6 @@ beforeAll(async () => {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
-});
-
-afterAll(async () => {
-  await mongoose.connection.close();
-  await mongoServer.stop();
-});
-
-beforeEach(async () => {
   const newUser = new User({
     username: "testuser",
     email: "testuser@email.com",
@@ -40,8 +32,9 @@ beforeEach(async () => {
   userId = newUser._id.toString();
 });
 
-afterEach(async () => {
-  await User.deleteMany({});
+afterAll(async () => {
+  await mongoose.connection.close();
+  await mongoServer.stop();
 });
 
 describe("register at /auth/register", () => {
