@@ -2,32 +2,32 @@ const jwt = require("jsonwebtoken");
 const TokenBlacklist = require("../models/tokenBlacklist");
 require("dotenv").config();
 
-module.exports = (req, res, next) => {
-  const authHeader = req.header("Authorization");
+module.exports = async (req, res, next) => {
+  const token = req.header("Authorization");
 
-  if (!authHeader) {
+  if (!token) {
     return res.status(401).json({ error: "Unauthorized" });
   }
 
-  TokenBlacklist.findOne({ authHeader }, (error, entry) => {
-    if (error) {
-      return res
-        .status(500)
-        .json({ message: "Error checking token blacklist" });
-    }
+  try {
+    const entry = await TokenBlacklist.findOne({ token });
+    console.log(entry);
 
     if (entry) {
       return res.status(401).json({ error: "Unauthorized" });
     }
 
-    try {
-      const decodedToken = jwt.verify(authHeader, process.env.SECRET_CODE);
+    const decodedToken = jwt.verify(token, process.env.SECRET_CODE);
 
-      req.userId = decodedToken.user._id;
+    console.log(decodedToken);
 
-      next();
-    } catch (error) {
-      return res.status(401).json({ error: "Unauthorized" });
-    }
-  });
+    req.userId = decodedToken.id;
+    req.token = token;
+
+    next();
+  } catch (error) {
+    console.log(error);
+
+    return res.status(401).json({ error: "Unauthorized" });
+  }
 };
