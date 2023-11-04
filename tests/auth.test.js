@@ -2,10 +2,13 @@ const mongoose = require("mongoose");
 const request = require("supertest");
 const app = require("../app");
 const User = require("../models/user");
+const authControllers = require("../controllers/authControllers");
 require("dotenv").config();
 const { MongoMemoryServer } = require("mongodb-memory-server");
 
 let mongoServer;
+let token;
+let userId;
 
 beforeAll(async () => {
   // Start an in-memory MongoDB server
@@ -32,6 +35,9 @@ beforeEach(async () => {
   });
 
   await newUser.save();
+
+  token = newUser.getToken();
+  userId = newUser._id.toString();
 });
 
 afterEach(async () => {
@@ -95,5 +101,23 @@ describe("login at /auth/login", () => {
     expect(res.body.error).toBe("Email or Password is incorrect");
     expect(res.header["token"]).toBeUndefined();
     expect(res.header["refresh_token"]).toBeUndefined();
+  });
+});
+
+describe("Should invalidate a token", () => {
+  test("should add a token to the blacklist", async () => {
+    const req = {
+      token,
+      userId,
+    };
+
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+
+    await authControllers.logout(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(200);
   });
 });
