@@ -23,7 +23,6 @@ const login = async (req, res) => {
 
     const token = user.getToken();
     const refresh_token = user.getRefreshToken();
-    console.log(token);
 
     res
       .status(200)
