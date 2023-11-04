@@ -193,17 +193,12 @@ const logout = async (req, res) => {
   const token = req.token;
   const userId = req.userId;
 
-  console.log(token);
-  console.log(userId);
-
   try {
     const blacklistEntry = new TokenBlacklist({
       userId,
       token,
     });
     await blacklistEntry.save();
-
-    console;
 
     return res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
