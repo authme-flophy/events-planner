@@ -9,7 +9,7 @@ module.exports = (req, res, next) => {
     return res.status(401).json({ error: "Unauthorized" });
   }
 
-  TokenBlacklist.findOne({ token }, (error, entry) => {
+  TokenBlacklist.findOne({ authHeader }, (error, entry) => {
     if (error) {
       return res
         .status(500)
